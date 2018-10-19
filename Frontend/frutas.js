@@ -1,6 +1,9 @@
 var app = new function () {
 
-  var i=0;
+  var i;
+  /**
+   * Con esta funcion se utiliza el GET las frutas en el html 
+   */
   function loadFruits(){
     
     var xmlhttp = new XMLHttpRequest();
@@ -8,38 +11,42 @@ var app = new function () {
     xmlhttp.open("GET", url,true);
     xmlhttp.addEventListener("load", reqListener);
     xmlhttp.send();
-
-    function reqListener(){
-        console.log(this);
-        var obj = JSON.parse(this.responseText);
-        var items = obj['Frutas'];
-        var txt = '';
-        var txt2='';
-        items.forEach((e) => {
-            //var url = e.href.split("/")
-            txt += '<tr>'
-            txt += "<td><img src=" + e.imagen + " width='100px' height='100px'></td>"
-            txt += '</tr>'
-
-            txt2+='<tr>'
-            txt2+="<td>" + e.nombre + "</td>"
-            txt2+="<td><img src=" + e.imagen + " width='100px' height='100px'></td>"
-            txt2+="<td><button type="+'"button"'+" id="+'"btnEdit"'+"Onclick="+'"edit('+e.id+')"'+">"+"Editar"+"</button>"
-            txt2+="</td><td><button type="+'"button"'+" id="+'"btnDelete"'+"Onclick="+'"erase('+e.id+')"'+">"+"Eliminar"+"</button></td>"
-            txt2+='</tr>'
-            i++;
-            console.log(i);
-
-        });
-        
-        document.getElementById('imagesListadoPrincipal').innerHTML = txt;
-        document.getElementById('listadoCRUD').innerHTML=txt2;
-    }
-   i=0;
+    i=0;
+    
   }
   
+  function reqListener(){
+    console.log(this);
+    var obj = JSON.parse(this.responseText);
+    var items = obj['Frutas'];
+    var txt = '';
+    var txt2='';
+    items.forEach((e) => {
+        txt += '<tr>'
+        var name="'"+e.nombre+"'"
+        txt+="<td><img src=" + e.imagen + " width='100px' height='100px'"+"onClick=alert("+name+")>"+"</td>"
+        txt += '</tr>'
+
+        txt2+='<tr>'
+        txt2+="<td>" + e.nombre + "</td>"
+        txt2 += "<td><img src=" + e.imagen + " width='100px' height='100px'></td>"
+        txt2+="<td><button type="+'"button"'+" id="+'"btnEdit"'+"Onclick="+'"edit('+e.id+')"'+">"+"Editar"+"</button>"
+        txt2+="</td><td><button type="+'"button"'+" id="+'"btnDelete"'+"Onclick="+'"erase('+e.id+')"'+">"+"Eliminar"+"</button></td>"
+        txt2+='</tr>'
+        i++;
+        console.log(i);
+
+    });
+    
+    document.getElementById('imagesListadoPrincipal').innerHTML = txt;
+    document.getElementById('listadoCRUD').innerHTML=txt2;
+}
 
 
+
+  /**
+   * Funcion para añadir una fruta
+   */
   add = function (){
     
     imagen= document.getElementById("imagen").value
@@ -54,13 +61,19 @@ var app = new function () {
     loadFruits();
     location.reload(true);
   }
-
+  /**
+   * Funcion para editar las frutas ()
+   */
   edit=function(index){
     document.getElementById('frutaid').value=index;
     document.getElementById('btnNew').style.display = "none";
     document.getElementById('btnUpdate').style.display = "inline";
   }
 
+  /**
+   * Esta funcion para guardar la fruta que se ha editado
+   * implementa el PUT
+   */
   update=function(){
     var posicion=document.getElementById('frutaid').value;
     imagen= document.getElementById("imagen").value
@@ -75,7 +88,10 @@ var app = new function () {
 
   }
 
-
+  /**
+   * Funcion para elimiar una fruta
+   * implementa el post
+   */
   erase=function(index){
 
     var xmlhttp = new XMLHttpRequest();
